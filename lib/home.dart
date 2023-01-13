@@ -142,7 +142,7 @@ class _HomeState extends State<Home> {
   //----------------payment-failure--msg--------
   void _hadlePaymentError(PaymentFailureResponse response) {
     Fluttertoast.showToast(
-        msg: "SUCCESS : ${"${response.code} - ${response.message!}"}",
+        msg: "FAILED : ${"${response.code} - ${response.message!}"}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
@@ -156,12 +156,12 @@ class _HomeState extends State<Home> {
   void checkout() {
     var options = {
       'key': 'rzp_test_4Jw7TAlTgYhszu',
-      'amount': '100',
-      'name': 'Salim Ali',
+      'amount': 10,
+      'name': 'Salim 123',
       'description': 'Business Deal',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
-      'prefill': {'contact': '454546535454', 'email': 'kres54po@gmail.com'},
+      'prefill': {'contact': '8156850106', 'email': 'lampdeep47@gmail.com'},
       'external': {
         'wallets': ['paytm']
       },

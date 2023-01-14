@@ -184,9 +184,9 @@ class _HomeState extends State<Home> {
 
   void checkout() {
     var options = {
-      'key': 'your_key',
+      'key': 'your_key.',
       'amount': int.parse(controller.text) * 100,
-      'name': 'your_name..',
+      'name': 'your_name',
       'description': 'Business Deal',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,

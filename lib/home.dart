@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 // ignore: depend_on_referenced_packages
@@ -13,6 +14,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Razorpay _razorpay;
+
+  final TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -47,15 +50,14 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 130.0),
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Center(
                 child: Container(
                   transform: null,
                   child: Container(
-                    height: 360,
+                    height: 300,
                     width: 280,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -83,43 +85,68 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              // ignore: avoid_unnecessary_containers
+              Container(
+                child: TextFormField(
+                  controller: controller,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      borderSide: BorderSide(
+                          width: 1, color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                    hintText: 'Amount',
+                    prefixIcon: Icon(
+                      Icons.attach_money_outlined,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               Container(
                 transform: null,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 30.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      checkout();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black,
-                            spreadRadius: 1,
-                            blurRadius: 8,
-                            offset: Offset(4, 4),
-                          ),
-                          BoxShadow(
-                            color: Colors.white,
-                            spreadRadius: 2,
-                            blurRadius: 8,
-                            offset: Offset(-4, -4),
-                          ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "ᴘᴀʏᴍᴇɴᴛ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black),
+                child: GestureDetector(
+                  onTap: () {
+                    checkout();
+                  },
+                  child: Container(
+                    height: 40,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black,
+                          spreadRadius: 1,
+                          blurRadius: 8,
+                          offset: Offset(4, 4),
                         ),
+                        BoxShadow(
+                          color: Colors.white,
+                          spreadRadius: 2,
+                          blurRadius: 8,
+                          offset: Offset(-4, -4),
+                        ),
+                      ],
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "ᴘᴀʏᴍᴇɴᴛ",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
                     ),
                   ),
@@ -134,6 +161,7 @@ class _HomeState extends State<Home> {
 
 //----------------payment-success--msg--------
   void _hadlePaymentSuccess(PaymentSuccessResponse response) {
+    // ignore: sized_box_for_whitespace
     Fluttertoast.showToast(
         msg: "SUCCESS : ${response.paymentId!}",
         toastLength: Toast.LENGTH_SHORT);
@@ -142,8 +170,9 @@ class _HomeState extends State<Home> {
   //----------------payment-failure--msg--------
   void _hadlePaymentError(PaymentFailureResponse response) {
     Fluttertoast.showToast(
-        msg: "FAILED : ${"${response.code} - ${response.message!}"}",
-        toastLength: Toast.LENGTH_SHORT);
+      msg: "FAILED : ${"${response.code} - ${response.message!}"}",
+      toastLength: Toast.LENGTH_SHORT,
+    );
   }
 
   //----------------External-wallet--msg--------
@@ -155,15 +184,15 @@ class _HomeState extends State<Home> {
 
   void checkout() {
     var options = {
-      'key': 'rzp_test_4Jw7TAlTgYhszu',
-      'amount': 10,
-      'name': 'Salim 123',
+      'key': 'your_key',
+      'amount': int.parse(controller.text) * 100,
+      'name': 'your_name..',
       'description': 'Business Deal',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
-      'prefill': {'contact': '8156850106', 'email': 'lampdeep47@gmail.com'},
+      'prefill': {'contact': '012345678', 'email': 'your_email'},
       'external': {
-        'wallets': ['paytm']
+        'wallets': ['wallet']
       },
     };
     try {
@@ -172,4 +201,6 @@ class _HomeState extends State<Home> {
       debugPrint("Error : $e");
     }
   }
+
+  void paymentSuccess() {}
 }
